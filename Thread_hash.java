@@ -7,6 +7,7 @@ public class Thread_hash extends Thread{
     private String encripted_pass;
     private String salt;
     private static Integer num_try;
+    private static final Integer MAX_LENGHT =7; 
 
     
     Thread_hash(String pencripted_pass, String psalt){
@@ -17,7 +18,9 @@ public class Thread_hash extends Thread{
 
     @Override
     public void run() {
-
+        for (int i = 0; i < MAX_LENGHT ; i++) {
+           
+        }
 
         
     }

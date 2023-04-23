@@ -34,6 +34,9 @@ public class Main{
 
 
     public static void main(String[] args) {
+        char a = 'z';
+        
+        System.out.println(((int)a));
         menuEntradas();
     }
 
