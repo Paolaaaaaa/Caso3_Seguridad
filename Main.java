@@ -1,3 +1,6 @@
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.Scanner;
 
 public class Main{
@@ -33,9 +36,22 @@ public class Main{
 
 
 
-    public static void main(String[] args) {
-        Thread_hash th = new Thread_hash("cod_criptografico", "sal", "SHA-1");
+    public static void main(String[] args) throws NoSuchAlgorithmException {
+        
+        MessageDigest md = MessageDigest.getInstance("SHA-256");
+        String pass = "aaaaaaa";
+        String salt = "ab";
+        String concat = pass+salt;
+        byte[] a = concat.getBytes(StandardCharsets.UTF_8);
+        byte[] hashBytes= md.digest(a);
+        System.out.println(hashBytes.toString());
+        Thread_hash th = new Thread_hash(hashBytes.toString(), salt, md);
         th.start();
+    
+    
+    
+    
+    
     }
 
  }

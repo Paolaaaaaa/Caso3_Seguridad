@@ -14,21 +14,17 @@ public class Thread_hash extends Thread{
     private ArrayList<String> combination= new ArrayList<String>();
     private MessageDigest algorithm; 
     private String response_password ="";
+    private String options = "abcdefghijklmnopqrstuvwxyz ";
 
     
-    Thread_hash(String pencripted_pass, String psalt, String algorithm){
+    Thread_hash(String pencripted_pass, String psalt, MessageDigest ms){
         this.encripted_pass = pencripted_pass;
         this.salt = psalt;
         this.encontrado = false;
-        //try {
-            //this.algorithm = MessageDigest.getInstance(algorithm);
-        //} catch (NoSuchAlgorithmException e) {
-            // TODO Auto-generated catch block
-            //e.printStackTrace();
-        //}
+        this.algorithm = ms;}
         
 
-    }
+    
 
     @Override
     public void run() {
@@ -48,38 +44,39 @@ public class Thread_hash extends Thread{
         byte[] bytes = concat_pass.getBytes(StandardCharsets.UTF_8);
         byte[] hash = algorithm.digest(bytes);
         String str_hash = hash.toString();
-        if (str_hash ==this.encripted_pass){
+        if (str_hash.equals(this.encripted_pass)){
             this.response_password=pass_comb;
+            this.encontrado =true;
 
     }
     }
     public void one_Thread () {
       
-        String password = "";
-            for (int i = 97; i < 124 && !encontrado; i++) {
-                for (int j = 97; j < 124 && !encontrado; j++) {
-                    for (int j2 = 97; j2 < 124 && !encontrado; j2++) {
-                        for (int k = 97; k < 124 && !encontrado; k++) {
-                            for (int k2 = 97; k2 < 124 && !encontrado; k2++) {
-                                for (int l = 97; l < 124 && !encontrado; l++) {
-                                    for (int l2 = 97; l2 < 124 && !encontrado; l2++) {
+            for (int i = 0; i < 26 && !encontrado; i++) {
+                for (int j = 0; j < 26 && !encontrado; j++) {
+                    for (int j2 = 0; j2 < 26 && !encontrado; j2++) {
+                        for (int k = 0; k < 26 && !encontrado; k++) {
+                            for (int k2 = 0; k2 < 26 && !encontrado; k2++) {
+                                for (int l = 0; l < 26 && !encontrado; l++) {
+                                    for (int l2 = 0; l2 < 26 && !encontrado; l2++) {
+                                        String password = "";
 
                                         int[] nam = {l2,l,k2,k,j2,j,i};
-                                        ArrayList<Character> validChars = new ArrayList<>();
+                         
                                         for (int n : nam) {
-                                            if (n!=123){
-                                                char c = (char) n;
-
-                                                validChars.add(c);
+                                            if (n!=26){
+                                                String str = Character.toString(options.charAt(n));
+                                                password+= str;
+                                                
                                             }
                                             
                                         }
+                                        password.toString();
 
-                                        char[] chr_ray = new char[validChars.size()];
-                                        for (int m = 0; m < chr_ray.length; m++) {
-                                            chr_ray[m]=validChars.get(m);
-                                        }
-                                        password = new String(chr_ray);
+
+                                       
+                                        System.out.println(password);
+                                        cmpr_pass(password);
 
                                        
                                         
