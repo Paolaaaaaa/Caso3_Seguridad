@@ -1,3 +1,4 @@
+import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -39,10 +40,10 @@ public class Main{
     public static void main(String[] args) throws NoSuchAlgorithmException {
         
         MessageDigest md = MessageDigest.getInstance("SHA-256");
-        String pass = "aaaaaaa";
+        String pass = "aaaaaaaab";
         String salt = "ab";
         String concat = pass+salt;
-        byte[] a = concat.getBytes(StandardCharsets.UTF_8);
+        byte[] a = concat.getBytes(Charset.forName("UTF-8"));
         byte[] hashBytes= md.digest(a);
         System.out.println(hashBytes.toString());
         Thread_hash th = new Thread_hash(hashBytes.toString(), salt, md);

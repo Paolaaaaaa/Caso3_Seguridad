@@ -1,4 +1,5 @@
 
+import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -41,16 +42,18 @@ public class Thread_hash extends Thread{
 
 
         String concat_pass = pass_comb +salt;
-        byte[] bytes = concat_pass.getBytes(StandardCharsets.UTF_8);
+        byte[] bytes = concat_pass.getBytes(Charset.forName("UTF-8"));
         byte[] hash = algorithm.digest(bytes);
-        String str_hash = hash.toString();
-        if (str_hash.equals(this.encripted_pass)){
+        String hash_str = hash.toString();
+        if (hash_str.equals(this.encripted_pass)){
             this.response_password=pass_comb;
             this.encontrado =true;
 
     }
     }
     public void one_Thread () {
+        String[] abc_dary =options.split("");
+
       
             for (int i = 0; i < 26 && !encontrado; i++) {
                 for (int j = 0; j < 26 && !encontrado; j++) {
@@ -63,15 +66,15 @@ public class Thread_hash extends Thread{
 
                                         int[] nam = {l2,l,k2,k,j2,j,i};
                          
-                                        for (int n : nam) {
-                                            if (n!=26){
-                                                String str = Character.toString(options.charAt(n));
-                                                password+= str;
+                                        for (int m = 0; m < nam.length; m++) {
+                                            
+                                            if (nam[m]!=26){
+                                                String str = abc_dary[nam[m]];
+                                                password+=str;
                                                 
                                             }
                                             
                                         }
-                                        password.toString();
 
 
                                        
