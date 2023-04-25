@@ -34,10 +34,8 @@ public class Main{
 
 
     public static void main(String[] args) {
-        char a = 'z';
-        
-        System.out.println(((int)a));
-        menuEntradas();
+        Thread_hash th = new Thread_hash("cod_criptografico", "sal", "SHA-1");
+        th.start();
     }
 
  }
