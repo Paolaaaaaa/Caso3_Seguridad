@@ -33,10 +33,6 @@ public class Thread_hash extends Thread{
     }
 
 
-    public synchronized Integer sec_to_try(){
-        return this.num_try+=1;
-
-    }
 
     public void cmpr_pass(String pass_comb){
 
@@ -96,7 +92,6 @@ public class Thread_hash extends Thread{
                 }
 
 
-                this.encontrado = true;
                    
 
 
