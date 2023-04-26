@@ -17,7 +17,7 @@ public class Thread_hash extends Thread{
     private String response_password ="";
     private String[] letras = {"","a","b","c","d","e","f","g","h","i","j","k","l", "m","n","o","p","q","r","s","t","u","v","w","x","y","z"};
     
-    Thread_hash(String pencripted_pass, String psalt, MessageDigest ms)throws NoSuchAlgorithmException{
+    Thread_hash(String pencripted_pass, String psalt)throws NoSuchAlgorithmException{
         this.encripted_pass = pencripted_pass;
         this.salt = psalt;
         this.encontrado = false;
@@ -44,14 +44,16 @@ public class Thread_hash extends Thread{
         MessageDigest md = MessageDigest.getInstance("SHA-256");
 
 
-        String ne_str = new String(password);
-        String concat_pass =ne_str +salt;
+        String concat_pass =password.concat(salt);
         byte[] bytes = concat_pass.getBytes();
         byte[] hash_b = md.digest(bytes);
         String hash_str = hash_b.toString();
         if (hash_str.equals(this.encripted_pass)){
             response_password=password;
-            this.encontrado =true;}
+            this.encontrado =true;
+            
+            
+        }
 
     }
     public void one_Thread () throws NoSuchAlgorithmException {
@@ -73,13 +75,8 @@ public class Thread_hash extends Thread{
                                             if (nam[m]!=0){
                                                 String letra = letras[nam[m]];
                                                 password=password+letra;
-                                            }
-                                            
-                                        }
+                                            }}
 
-
-                                       
-                                        System.out.println(password);
                                         SHA256_cmpr_pass(password);
                                         
                                        

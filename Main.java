@@ -39,13 +39,8 @@ public class Main{
 
     public static void main(String[] args) throws NoSuchAlgorithmException {
         
-        MessageDigest md = MessageDigest.getInstance("SHA-256");
-        String password = "c";
-        String salt = "ab";
-        password  = password+salt;
-        byte[] hashBytes= md.digest(password.getBytes());
-        String hashBytes_str = hashBytes.toString();
-        Thread_hash th = new Thread_hash("[B@224aed64", "aa", md);
+      
+        Thread_hash th = new Thread_hash("[B@224aed64", "aa");
         th.start();
     
     
