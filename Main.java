@@ -40,13 +40,12 @@ public class Main{
     public static void main(String[] args) throws NoSuchAlgorithmException {
         
         MessageDigest md = MessageDigest.getInstance("SHA-256");
-        String pass = "aaaaaaaab";
+        String password = "c";
         String salt = "ab";
-        String concat = pass+salt;
-        byte[] a = concat.getBytes(Charset.forName("UTF-8"));
-        byte[] hashBytes= md.digest(a);
-        System.out.println(hashBytes.toString());
-        Thread_hash th = new Thread_hash(hashBytes.toString(), salt, md);
+        password  = password+salt;
+        byte[] hashBytes= md.digest(password.getBytes());
+        String hashBytes_str = hashBytes.toString();
+        Thread_hash th = new Thread_hash("[B@224aed64", "aa", md);
         th.start();
     
     
