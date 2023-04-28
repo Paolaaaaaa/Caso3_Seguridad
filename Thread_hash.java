@@ -5,23 +5,25 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 
+
+import Test.Test_Txt;
 public class Thread_hash extends Thread{
 
     private String encripted_pass;
     private String salt;
-    private static Integer num_try;
-    private static final Integer MAX_LENGHT =7;
     private boolean encontrado; 
-    private ArrayList<String> combination= new ArrayList<String>();
-    private MessageDigest algorithm; 
-    private String response_password ="";
     private String[] letras = {"","a","b","c","d","e","f","g","h","i","j","k","l", "m","n","o","p","q","r","s","t","u","v","w","x","y","z"};
-    
-    Thread_hash(String pencripted_pass, String psalt)throws NoSuchAlgorithmException{
+    private String real_password;
+    private String algorithm;
+    private long total_time;
+    private MessageDigest md;
+    Thread_hash(String pencripted_pass, String psalt, String palgorithm)throws NoSuchAlgorithmException{
         this.encripted_pass = pencripted_pass;
         this.salt = psalt;
         this.encontrado = false;
-        this.algorithm = MessageDigest.getInstance("SHA-256");}
+        this.algorithm =palgorithm;
+        this.md = MessageDigest.getInstance(palgorithm);
+    }
         
 
     
@@ -30,35 +32,37 @@ public class Thread_hash extends Thread{
     public void run() {
         try {
             one_Thread();
+            System.out.println(this.real_password);
         } catch (NoSuchAlgorithmException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
     }
 
+    public synchronized String hasher (String password, String salt) throws NoSuchAlgorithmException{
 
-
-    public void SHA256_cmpr_pass(String password) throws NoSuchAlgorithmException{
-
-
-        MessageDigest md = MessageDigest.getInstance("SHA-256");
-
-
+        
         String concat_pass =password.concat(salt);
-        byte[] bytes = concat_pass.getBytes();
-        byte[] hash_b = md.digest(bytes);
-        String hash_str = hash_b.toString();
-        if (hash_str.equals(this.encripted_pass)){
-            response_password=password;
-            this.encontrado =true;
-            
-            
+      
+        byte[] hash_b = md.digest(concat_pass.getBytes());
+        StringBuilder sb = new StringBuilder();
+
+        for (byte b : hash_b) {
+            sb.append(String.format("%02x", b));
         }
+        return sb.toString();
 
     }
-    public void one_Thread () throws NoSuchAlgorithmException {
 
-      
+
+
+    public String one_Thread () throws NoSuchAlgorithmException {
+
+
+        long startTime = System.currentTimeMillis();
+
+        String password= "";
+
             for (int i = 0; i < 27 && !encontrado; i++) {
                 for (int j = 0; j < 27 && !encontrado; j++) {
                     for (int j2 = 0; j2 < 27 && !encontrado; j2++) {
@@ -66,20 +70,25 @@ public class Thread_hash extends Thread{
                             for (int k2 = 0; k2 < 27 && !encontrado; k2++) {
                                 for (int l = 0; l < 27 && !encontrado; l++) {
                                     for (int l2 = 0; l2 < 27 && !encontrado; l2++) {
-                                        String password= new String();
+                                        password= "";
 
                                         int[] nam = {l2,l,k2,k,j2,j,i};
                          
                                         for (int m = 0; m < nam.length; m++) {
                                             
                                             if (nam[m]!=0){
-                                                String letra = letras[nam[m]];
-                                                password=password+letra;
+                                            
+                                                password=password.concat(letras[nam[m]]);
+                                
                                             }}
+                                            
+                                            String hash=hasher(password, this.salt);
 
-                                        SHA256_cmpr_pass(password);
                                         
-                                       
+                                            if (hash.equals(encripted_pass)){
+                                                this.encontrado = true;
+                                                this.real_password =password;
+                                            }
                                         
                                     }
                                 }
@@ -91,14 +100,34 @@ public class Thread_hash extends Thread{
 
 
 
-                }
+            }
+            long endTime = System.currentTimeMillis();
+            this.total_time = endTime - startTime;
+
+        return password;
 
 
                    
 
 
                 
-            }
+    }
+
+
+    public String getTotal_time() {
+        return String.valueOf(total_time);
+    }
+    public String getEncripted_pass() {
+        return encripted_pass;
+    }
+
+    public String getSalt() {
+        return salt;
+    }
+    public String getAlgorithm() {
+        return algorithm;
+    }
+    
 
     }
 
