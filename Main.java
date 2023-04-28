@@ -9,6 +9,7 @@ import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Scanner;
+import java.util.concurrent.CyclicBarrier;
 
 public class Main{
 
@@ -56,24 +57,32 @@ public class Main{
                 System.out.println("Empieza caso "+i);
 
                 String[] datos = linea.split(separador);
+                if (datos.length >3){
                 String hash_code = datos[0];
                 String salt = datos[1];
                 String algorithm = datos[2];
                 Integer threads_num = Integer.parseInt(datos[3]);
                 if (threads_num == 1){
                     Thread_hash th;
+
                     try {
-                        th = new Thread_hash(hash_code,salt,algorithm);
-                        th.one_Thread();
-                        write_txt(th.getEncripted_pass(), th.getSalt(), th.getAlgorithm(),  "1",th.getTotal_time());
+
+
+                        
+                        CyclicBarrier barrier = new CyclicBarrier(1);
+                        th = new Thread_hash(hash_code,salt,algorithm,barrier);
+
+
+                        th.start();;
                         System.out.println("Termina caso "+i);
+                        i++;
 
                     } catch (NoSuchAlgorithmException e) {
                         // TODO Auto-generated catch block
                         e.printStackTrace();
                     }
 
-                }
+                }}
 
              }
             br.close();
@@ -84,44 +93,7 @@ public class Main{
     }
 
 
-    public static boolean write_txt(String hash_code, String salt, String algorithm, String _threads,String times){
-
-
-            
-        try {
-
-            File archivo = new File("Test/test_cases.txt");
-
-            try (BufferedWriter escritor = new BufferedWriter(new FileWriter(archivo, true))) {
-                escritor.write("\n");
-
-                escritor.write(hash_code);
-                escritor.write(",");
-
-                escritor.write(salt);
-                escritor.write(",");
-
-                escritor.write(algorithm);
-                escritor.write(",");
-
-                escritor.write(_threads);
-                escritor.write(",");
-
-                escritor.write(times);
-                escritor.flush();
-                escritor.close();
-                return true;
-            }
-
-            
-            
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        return false;
-
-    }
+    
 
     
 

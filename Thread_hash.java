@@ -1,10 +1,15 @@
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
-
+import java.util.concurrent.BrokenBarrierException;
+import java.util.concurrent.CyclicBarrier;
 
 import Test.Test_Txt;
 public class Thread_hash extends Thread{
@@ -17,12 +22,14 @@ public class Thread_hash extends Thread{
     private String algorithm;
     private long total_time;
     private MessageDigest md;
-    Thread_hash(String pencripted_pass, String psalt, String palgorithm)throws NoSuchAlgorithmException{
+    private CyclicBarrier cb;
+    Thread_hash(String pencripted_pass, String psalt, String palgorithm, CyclicBarrier cbp)throws NoSuchAlgorithmException{
         this.encripted_pass = pencripted_pass;
         this.salt = psalt;
         this.encontrado = false;
         this.algorithm =palgorithm;
         this.md = MessageDigest.getInstance(palgorithm);
+        this.cb = cbp;
     }
         
 
@@ -32,6 +39,15 @@ public class Thread_hash extends Thread{
     public void run() {
         try {
             one_Thread();
+            try {
+                cb.await();
+            } catch (InterruptedException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            } catch (BrokenBarrierException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
             System.out.println(this.real_password);
         } catch (NoSuchAlgorithmException e) {
             // TODO Auto-generated catch block
@@ -53,7 +69,47 @@ public class Thread_hash extends Thread{
         return sb.toString();
 
     }
+    public static boolean write_txt(String hash_code, String salt, String algorithm, String _threads,String times,String passwordString){
 
+
+            
+        try {
+
+            File archivo = new File("Test/test_result.txt");
+
+            try (BufferedWriter escritor = new BufferedWriter(new FileWriter(archivo, true))) {
+                escritor.write("\n");
+
+                escritor.write(hash_code);
+                escritor.write(",");
+
+                escritor.write(salt);
+                escritor.write(",");
+
+                escritor.write(algorithm);
+                escritor.write(",");
+
+                escritor.write(_threads);
+                escritor.write(",");
+
+                escritor.write(times);
+                escritor.write(",");
+                escritor.write(passwordString);
+
+                escritor.flush();
+                escritor.close();
+                return true;
+            }
+
+            
+            
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        return false;
+
+    }
 
 
     public String one_Thread () throws NoSuchAlgorithmException {
@@ -87,7 +143,11 @@ public class Thread_hash extends Thread{
                                         
                                             if (hash.equals(encripted_pass)){
                                                 this.encontrado = true;
-                                                this.real_password =password;
+                                                this.real_password = password;
+
+                                                long endTime = System.currentTimeMillis();
+                                                this.total_time = endTime - startTime;
+                                                write_txt(hash, salt, this.algorithm,"1",String.valueOf(total_time),password);
                                             }
                                         
                                     }
@@ -101,8 +161,7 @@ public class Thread_hash extends Thread{
 
 
             }
-            long endTime = System.currentTimeMillis();
-            this.total_time = endTime - startTime;
+            
 
         return password;
 
@@ -127,7 +186,15 @@ public class Thread_hash extends Thread{
     public String getAlgorithm() {
         return algorithm;
     }
-    
+    public String getReal_password() {
+        return real_password;
+    }
+
+
+
+
+ 
+
 
     }
 

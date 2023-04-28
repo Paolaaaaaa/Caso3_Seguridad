@@ -270,6 +270,7 @@ public class Test_Txt {
             }
             // Cerrar FileWriter
             escritor.close();
+        
             
             System.out.println("Archivo de texto generado correctamente.");
         } catch (IOException e) {
