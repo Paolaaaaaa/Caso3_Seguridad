@@ -66,25 +66,20 @@ public class Main{
                     Thread_hash th;
 
                     try {
-
-
-                        
                         CyclicBarrier barrier = new CyclicBarrier(1);
                         th = new Thread_hash(hash_code,salt,algorithm,barrier);
 
 
                         th.start();;
                         System.out.println("Termina caso "+i);
-                        i++;
+                        i++;} catch (NoSuchAlgorithmException e) {}
 
-                    } catch (NoSuchAlgorithmException e) {
-                        // TODO Auto-generated catch block
-                        e.printStackTrace();
-                    }
+                } else if (threads_num == 2) {
+
 
                 }}
 
-             }
+            }
             br.close();
             fr.close();
         } catch (IOException e) {
