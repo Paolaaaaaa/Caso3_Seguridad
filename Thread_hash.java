@@ -10,8 +10,6 @@ import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.concurrent.BrokenBarrierException;
 import java.util.concurrent.CyclicBarrier;
-
-import Test.Test_Txt;
 public class Thread_hash extends Thread{
 
     private String encripted_pass;
@@ -60,7 +58,7 @@ public class Thread_hash extends Thread{
         
         String concat_pass =password.concat(salt);
       
-        byte[] hash_b = md.digest(concat_pass.getBytes());
+        byte[] hash_b = md.digest(concat_pass.getBytes(StandardCharsets.UTF_8));
         StringBuilder sb = new StringBuilder();
 
         for (byte b : hash_b) {
@@ -104,7 +102,6 @@ public class Thread_hash extends Thread{
             
             
         } catch (IOException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
         return false;
@@ -112,7 +109,7 @@ public class Thread_hash extends Thread{
     }
 
 
-    public  String two_threads() {
+    public  void two_threads() {
 
     }
 

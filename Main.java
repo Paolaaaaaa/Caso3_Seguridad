@@ -2,11 +2,7 @@ import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
-import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
-import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Scanner;
 import java.util.concurrent.CyclicBarrier;
@@ -43,7 +39,7 @@ public class Main{
     }
 
     public static void read_test_cases(){
-        String archivo = "./Test/test_cases.txt";
+        String archivo = "./Test/test_cases_256.txt";
         String linea = "";
         String separador = ",";
         int i =0;
@@ -57,22 +53,29 @@ public class Main{
                 System.out.println("Empieza caso "+i);
 
                 String[] datos = linea.split(separador);
-                if (datos.length >3){
+                if (datos.length >1){
                 String hash_code = datos[0];
                 String salt = datos[1];
                 String algorithm = datos[2];
+                System.out.println(algorithm);
                 Integer threads_num = Integer.parseInt(datos[3]);
                 if (threads_num == 1){
                     Thread_hash th;
 
                     try {
                         CyclicBarrier barrier = new CyclicBarrier(1);
+                        
                         th = new Thread_hash(hash_code,salt,algorithm,barrier);
+                        th.start();
 
 
-                        th.start();;
                         System.out.println("Termina caso "+i);
-                        i++;} catch (NoSuchAlgorithmException e) {}
+                        i++;}
+
+                    catch (NoSuchAlgorithmException e) {
+
+                        System.out.println("no algorithm");
+                    }
 
                 } else if (threads_num == 2) {
 
@@ -93,8 +96,11 @@ public class Main{
     
 
     public static void main(String[] args) throws NoSuchAlgorithmException {
-        
-      
+
+
+
+
+
 
         read_test_cases();
     

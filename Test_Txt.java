@@ -1,8 +1,9 @@
-package Test;
+
 
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
@@ -27,7 +28,7 @@ public class Test_Txt {
         
         String concat_pass =password.concat(salt);
       
-        byte[] hash_b = md.digest(concat_pass.getBytes());
+        byte[] hash_b = md.digest(concat_pass.getBytes(StandardCharsets.UTF_8));
         StringBuilder sb = new StringBuilder();
 
         for (byte b : hash_b) {
@@ -47,17 +48,19 @@ public class Test_Txt {
 
             escritor.write("hash_code,salt,algorithm,#thread,characters,realPassword\n");
             String pass= new String();
-            Test_Txt tt = new Test_Txt("SHA-256");
-            Test_Txt tt_512 = new Test_Txt("SHA-512");
 
-            // Escribir contenido en el archivo
+            Thread_hash th_256= new Thread_hash(null, null, "SHA-256", null);
+            Thread_hash th_512 = new Thread_hash(null, null, "SHA-512", null);
+
+            
+
 
             
             String passs= new String();
             for (int i = 0; i < 7; i++) {
                 
                 passs=passs.concat(letras[26]);
-                String hash_code=tt.sHA256_cmpr_pass(passs,pisca_sal_1);
+                String hash_code=th_256.hasher(passs,pisca_sal_1);
                 escritor.write(hash_code);
                 escritor.write(",");
 
@@ -83,7 +86,7 @@ public class Test_Txt {
             for (int i = 0; i < 7; i++) {
                 
                 pass=pass.concat(letras[26]);
-                String hash_code=tt.sHA256_cmpr_pass(pass,pisca_sal_2);
+                String hash_code=th_256.hasher(pass,pisca_sal_2);
                 escritor.write(hash_code);
                 escritor.write(",");
 
@@ -110,7 +113,7 @@ public class Test_Txt {
             for (int i = 0; i < 7; i++) {
                 
                 pass=pass.concat(letras[26]);
-                String hash_code=tt_512.sHA256_cmpr_pass(pass,pisca_sal_1);
+                String hash_code=th_512.hasher(pass,pisca_sal_1);
                 escritor.write(hash_code);
                 escritor.write(",");
 
@@ -137,7 +140,7 @@ public class Test_Txt {
             for (int i = 0; i < 7; i++) {
                 
                 pass=pass.concat(letras[26]);
-                String hash_code=tt_512.sHA256_cmpr_pass(pass,pisca_sal_2);
+                String hash_code=th_512.hasher(pass,pisca_sal_2);
                 escritor.write(hash_code);
                 escritor.write(",");
 
@@ -166,7 +169,7 @@ public class Test_Txt {
             for (int i = 0; i < 7; i++) {
                 
                 pass=pass.concat(letras[26]);
-                String hash_code=tt.sHA256_cmpr_pass(pass,pisca_sal_1);
+                String hash_code=th_256.hasher(pass,pisca_sal_1);
                 escritor.write(hash_code);
                 escritor.write(",");
 
@@ -192,7 +195,7 @@ public class Test_Txt {
             for (int i = 0; i < 7; i++) {
                 
                 pass=pass.concat(letras[26]);
-                String hash_code=tt.sHA256_cmpr_pass(pass,pisca_sal_2);
+                String hash_code=th_256.hasher(pass,pisca_sal_2);
                 escritor.write(hash_code);
                 escritor.write(",");
 
@@ -219,7 +222,7 @@ public class Test_Txt {
             for (int i = 0; i < 7; i++) {
                 
                 pass=pass.concat(letras[26]);
-                String hash_code=tt_512.sHA256_cmpr_pass(pass,pisca_sal_1);
+                String hash_code=th_512.hasher(pass,pisca_sal_1);
                 escritor.write(hash_code);
                 escritor.write(",");
 
@@ -246,7 +249,7 @@ public class Test_Txt {
             for (int i = 0; i < 7; i++) {
                 
                 pass=pass.concat(letras[26]);
-                String hash_code=tt_512.sHA256_cmpr_pass(pass,pisca_sal_2);
+                String hash_code=th_512.hasher(pass,pisca_sal_2);
                 escritor.write(hash_code);
                 escritor.write(",");
 
