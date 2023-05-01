@@ -39,7 +39,7 @@ public class Main{
     }
 
     public static void read_test_cases(){
-        String archivo = "./Test/test_cases_256.txt";
+        String archivo = "./Test/test_cases_512.txt";
         String linea = "";
         String separador = ",";
         int i =0;
@@ -78,6 +78,10 @@ public class Main{
                     }
 
                 } else if (threads_num == 2) {
+
+
+
+                    /*Aquí */
 
 
                 }}
