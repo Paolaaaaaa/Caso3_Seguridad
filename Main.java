@@ -79,9 +79,25 @@ public class Main{
 
                 } else if (threads_num == 2) {
 
+                    MultiThread_hash mth_1;
+                    MultiThread_hash mth_2;
+
+                    CyclicBarrier barrier_m = new CyclicBarrier(2);
+                    try {
+                        mth_1 = new MultiThread_hash(hash_code, salt, algorithm, barrier_m, 0, 13);
+                        mth_2 = new MultiThread_hash(hash_code, salt, algorithm, barrier_m, 14, 27);
+                        mth_1.start();
+                        mth_2.start();
+                    } catch (NoSuchAlgorithmException e) {
+                        e.printStackTrace();
 
 
-                    /*Aquí */
+                        System.out.println("no algorithm");
+
+                    }
+
+
+
 
 
                 }}

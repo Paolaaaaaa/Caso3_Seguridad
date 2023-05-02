@@ -8,7 +8,7 @@ import java.security.NoSuchAlgorithmException;
 import java.util.concurrent.BrokenBarrierException;
 import java.util.concurrent.CyclicBarrier;
 
-public class MultiThread_hash {
+public class MultiThread_hash extends Thread {
     private String encripted_pass;
     private String salt;
     private static boolean encontrado; 
@@ -64,6 +64,8 @@ public class MultiThread_hash {
             } catch (InterruptedException | BrokenBarrierException e) {
                 e.printStackTrace();
             }
+            System.out.println(this.real_password);
+
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
         }
@@ -159,11 +161,13 @@ public class MultiThread_hash {
 
                                         
                                             if (hash.equals(encripted_pass)){
+
+                                                synchronized(this){
                                                 MultiThread_hash.encontrado = true;
                                                 this.real_password = password;
 
                                                 long endTime = System.currentTimeMillis();
-                                                this.total_time = endTime - startTime;
+                                                this.total_time = endTime - startTime;}
                                                 write_txt(hash, salt, this.algorithm,"2",String.valueOf(total_time),password);
                                             }
                                         
