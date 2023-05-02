@@ -109,9 +109,6 @@ public class Thread_hash extends Thread{
     }
 
 
-    public  void two_threads() {
-
-    }
 
 
     public String one_Thread () throws NoSuchAlgorithmException {
