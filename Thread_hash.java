@@ -1,206 +1,56 @@
-
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
-import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-import java.util.ArrayList;
-import java.util.concurrent.BrokenBarrierException;
-import java.util.concurrent.CyclicBarrier;
-public class Thread_hash extends Thread{
+import java.io.RandomAccessFile;
+import java.util.Map;
 
-    private String encripted_pass;
-    private String salt;
-    private boolean encontrado; 
-    private String[] letras = {"","a","b","c","d","e","f","g","h","i","j","k","l", "m","n","o","p","q","r","s","t","u","v","w","x","y","z"};
-    private String real_password;
-    private String algorithm;
-    private long total_time;
-    private MessageDigest md;
-    private CyclicBarrier cb;
-    Thread_hash(String pencripted_pass, String psalt, String palgorithm, CyclicBarrier cbp)throws NoSuchAlgorithmException{
-        this.encripted_pass = pencripted_pass;
-        this.salt = psalt;
-        this.encontrado = false;
-        this.algorithm =palgorithm;
-        this.md = MessageDigest.getInstance(palgorithm);
-        this.cb = cbp;
+public class Thread_hash extends Thread {
+    private String filename;
+    private long start;
+    private long end;
+    private Map<String, Integer> wordCount;
+
+    public Thread_hash(String filename, long start, long end, Map<String, Integer> wordCount) {
+        this.filename = filename;
+        this.start = start;
+        this.end = end;
+        this.wordCount = wordCount;
     }
-        
 
-    
-
-    @Override
     public void run() {
         try {
-            one_Thread();
-            try {
-                cb.await();
-            } catch (InterruptedException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            } catch (BrokenBarrierException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
-            System.out.println(this.real_password);
-        } catch (NoSuchAlgorithmException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-    }
+            RandomAccessFile file = new RandomAccessFile(filename, "r");
+            file.seek(start);
 
-    public synchronized String hasher (String password, String salt) throws NoSuchAlgorithmException{
-
-        
-        String concat_pass =password.concat(salt);
-      
-        byte[] hash_b = md.digest(concat_pass.getBytes(StandardCharsets.UTF_8));
-        StringBuilder sb = new StringBuilder();
-
-        for (byte b : hash_b) {
-            sb.append(String.format("%02x", b));
-        }
-        return sb.toString();
-
-    }
-    public static boolean write_txt(String hash_code, String salt, String algorithm, String _threads,String times,String passwordString){
-
-
-            
-        try {
-
-            File archivo = new File("Test/test_result.txt");
-
-            try (BufferedWriter escritor = new BufferedWriter(new FileWriter(archivo, true))) {
-                escritor.write("\n");
-
-                escritor.write(hash_code);
-                escritor.write(",");
-
-                escritor.write(salt);
-                escritor.write(",");
-
-                escritor.write(algorithm);
-                escritor.write(",");
-
-                escritor.write(_threads);
-                escritor.write(",");
-
-                escritor.write(times);
-                escritor.write(",");
-                escritor.write(passwordString);
-
-                escritor.flush();
-                escritor.close();
-                return true;
+            // Move the start position to the beginning of the next word
+            if (start > 0) {
+                while (file.getFilePointer() > start && Character.isLetterOrDigit((char)file.readByte())) {
+                    file.seek(file.getFilePointer() - 2);
+                }
+                if (file.getFilePointer() > start) {
+                    file.seek(file.getFilePointer() - 1);
+                }
             }
 
-            
-            
+            StringBuilder word = new StringBuilder();
+            int c;
+            while (file.getFilePointer() < end && (c = file.read()) != -1) {
+                if (Character.isLetterOrDigit(c)) {
+                    word.append((char) c);
+                } else if (word.length() > 0) {
+                    String strWord = word.toString().toLowerCase();
+                    wordCount.put(strWord, wordCount.getOrDefault(strWord, 0) + 1);
+                    word.setLength(0);
+                }
+            }
+
+            // Handle last word in file
+            if (word.length() > 0) {
+                String strWord = word.toString().toLowerCase();
+                wordCount.put(strWord, wordCount.getOrDefault(strWord, 0) + 1);
+            }
+
+            file.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return false;
-
     }
-
-
-    public  void two_threads() {
-
-    }
-
-
-    public String one_Thread () throws NoSuchAlgorithmException {
-
-
-        long startTime = System.currentTimeMillis();
-
-        String password= "";
-
-            for (int i = 0; i < 27 && !encontrado; i++) {
-                for (int j = 0; j < 27 && !encontrado; j++) {
-                    for (int j2 = 0; j2 < 27 && !encontrado; j2++) {
-                        for (int k = 0; k < 27 && !encontrado; k++) {
-                            for (int k2 = 0; k2 < 27 && !encontrado; k2++) {
-                                for (int l = 0; l < 27 && !encontrado; l++) {
-                                    for (int l2 = 0; l2 < 27 && !encontrado; l2++) {
-                                        password= "";
-
-                                        int[] nam = {l2,l,k2,k,j2,j,i};
-                         
-                                        for (int m = 0; m < nam.length; m++) {
-                                            
-                                            if (nam[m]!=0){
-                                            
-                                                password=password.concat(letras[nam[m]]);
-                                
-                                            }}
-                                            
-                                            String hash=hasher(password, this.salt);
-
-                                        
-                                            if (hash.equals(encripted_pass)){
-                                                this.encontrado = true;
-                                                this.real_password = password;
-
-                                                long endTime = System.currentTimeMillis();
-                                                this.total_time = endTime - startTime;
-                                                write_txt(hash, salt, this.algorithm,"1",String.valueOf(total_time),password);
-                                            }
-                                        
-                                    }
-                                }
-                            }
-                        }
-                    }
-                    
-                }
-
-
-
-            }
-            
-
-        return password;
-
-
-                   
-
-
-                
-    }
-
-
-    public String getTotal_time() {
-        return String.valueOf(total_time);
-    }
-    public String getEncripted_pass() {
-        return encripted_pass;
-    }
-
-    public String getSalt() {
-        return salt;
-    }
-    public String getAlgorithm() {
-        return algorithm;
-    }
-    public String getReal_password() {
-        return real_password;
-    }
-
-
-
-
- 
-
-
-    }
-
-    
-    
-    
-
+}
