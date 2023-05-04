@@ -46,7 +46,9 @@ public class Thread_hash extends Thread{
                 // TODO Auto-generated catch block
                 e.printStackTrace();
             }
-            System.out.println(this.real_password);
+            System.out.println("\nSu contraseña es: "+this.real_password+"ms");
+            System.out.println("Tiempo de respuesta: "+this.total_time);
+
         } catch (NoSuchAlgorithmException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();

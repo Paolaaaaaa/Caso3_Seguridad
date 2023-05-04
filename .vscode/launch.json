@@ -6,10 +6,10 @@
     "configurations": [
         {
             "type": "java",
-            "name": "Main2Threads",
+            "name": "Main",
             "request": "launch",
-            "mainClass": "Main2Threads",
-            "projectName": "Caso3_Seguridad_f4b6fdd0"
+            "mainClass": "Main",
+            "projectName": "Caso3_Seguridad_263b54af"
         },
         {
             "type": "java",
