@@ -27,6 +27,23 @@ public class Main{
 
 
         menuEntradas();
+
+
+        if (num_threads==2){
+
+            Main2Threads.ejx2Threads(cod_criptografico,sal,algoritmo_generacion);
+
+
+        }
+        else if (num_threads ==1){
+
+
+            CyclicBarrier barrier = new CyclicBarrier(1);
+                        
+            Thread_hash th = new Thread_hash(cod_criptografico,sal,algoritmo_generacion,barrier);
+            th.start();
+
+        }
     
     
     
@@ -41,13 +58,13 @@ public class Main{
         System.out.println("//////////// CASO 3-202310 ////////////\n ");
         System.out.println("_____________Grupo 11_____________\n");
 
-        System.out.println("Escriba el algoritmo de generación: \n");
+        System.out.println("Escriba el algoritmo de generación: ");
         algoritmo_generacion = input.nextLine();
-        System.out.println("Escriba el código encriptado: \n");
+        System.out.println("Escriba el código encriptado: ");
         cod_criptografico = input.nextLine();
-        System.out.println("Escriba la SAL : \n");
+        System.out.println("Escriba la SAL :");
         sal = input.nextLine();
-        System.out.println("Escriba la numero de Threads (1,2) : \n");
+        System.out.println("Escriba la numero de Threads (1,2) :");
         num_threads = input.nextInt();
         input.close();
 

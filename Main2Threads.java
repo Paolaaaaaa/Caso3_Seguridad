@@ -12,9 +12,11 @@ private static byte[] hash(String algoritmo, String contrasena, String salts) th
 
     
     MessageDigest md = MessageDigest.getInstance(algoritmo);
-    byte[] salt = salts.getBytes();
-    md.update(salt);
-    return md.digest(contrasena.getBytes());
+
+    String concat_str = contrasena.concat(salts);
+    byte[] __bconcat = concat_str.getBytes(StandardCharsets.UTF_8);
+    
+    return md.digest(__bconcat);
 }
 
 public static void main(String[] args) {
