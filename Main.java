@@ -3,6 +3,7 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.security.NoSuchAlgorithmException;
 import java.util.Scanner;
 import java.util.concurrent.CyclicBarrier;
@@ -18,6 +19,20 @@ public class Main{
 
     }
 
+    public static void main(String[] args) throws NoSuchAlgorithmException {
+
+
+
+
+
+
+        menuEntradas();
+    
+    
+    
+    
+    
+    }
     public static  void menuEntradas()
     {
         Scanner input = new Scanner(System.in);
@@ -78,12 +93,12 @@ public class Main{
                     }
 
                 } else if (threads_num == 2) {
+                    Main2Threads.ejx2Threads(hash_code,salt,algorithm);
 
 
 
-                    /*Aquí */
-
-
+                    System.out.println("Termina caso "+i);
+                    i++;
                 }}
 
             }
@@ -99,19 +114,6 @@ public class Main{
 
     
 
-    public static void main(String[] args) throws NoSuchAlgorithmException {
 
-
-
-
-
-
-        read_test_cases();
-    
-    
-    
-    
-    
-    }
 
  }
