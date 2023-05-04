@@ -27,6 +27,20 @@ public class Main{
 
 
         menuEntradas();
+
+        if (num_threads==2){
+
+        }
+        else if (num_threads ==1){
+
+
+            CyclicBarrier barrier = new CyclicBarrier(1);
+                        
+            Thread_hash th = new Thread_hash(cod_criptografico,sal,algoritmo_generacion,barrier);
+            System.out.println("\nSu contraseña es:.......\n");
+            th.start();
+
+        }
     
     
     
